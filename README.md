@@ -4,17 +4,17 @@ Complete web app from front end to back end. It includes a console, a storage en
 
 ## Console
 
-## Description
+### Description
 We are building a command interpreter to manage objects. All other parts of the project will use this as a base, so it's an essential component of it.
 
-## How we built it:
+### How we built it:
 * First, we built a parent class called BaseModel. 
 * We create a flow to serialize and deserialize, Instance <-> Dictionary <-> JSON string <-> file. 
 * Classes for the project that inherit from BaseModel.
 * First abstracted storage engine of the project: File storage.
 * Create unittests to validate all classes and storage engine.
 
-## How to use it?
+### How to use it?
 
 Interactive mode:
 
