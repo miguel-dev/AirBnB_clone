@@ -1,5 +1,8 @@
-# 0x00. AirBnB clone - The Console
-## AirBnB clone project
+# AirBnB clone
+
+Complete web app from front end to back end. It includes a console, a storage engine, a RESTful API and a front end with static and dynamic components.
+
+## Console
 
 ## Description
 We are building a command interpreter to manage objects. All other parts of the project will use this as a base, so it's an essential component of it.
