@@ -5,7 +5,7 @@
 """
 from datetime import datetime, date
 import uuid
-from models import storage
+import models
 
 
 class BaseModel():
@@ -21,25 +21,26 @@ class BaseModel():
              *args: Receive the arguments in list
              **kwargs: Receive the argumenst in form of keyword
         """
-        if kwargs:
-            for key, value in kwargs.items():
-                if key == "created_at" or key == "update_at":
-                    setattr(self, key,
-                            datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f"))
-                elif key != "__class__":
-                    setattr(self, key, value)
-        else:
+
+        if not kwargs:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
-            storage.new(self)
-
+            models.storage.new(self)
+        else:
+            for key, value in kwargs.items():
+                if key == "created_at" or key == "update_at":
+                    string = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
+                    setattr(self, key, string)
+                elif key != "__class__":
+                    setattr(self, key, value)
+    
     def __str__(self):
         """
             Description of the class [<class name>] (<self.id>) <self.__dict__>
         """
-        return "[{:s}] ({:s}) {}".format(self.__class__.__name__,
-                                         self.id, self.__dict__)
+        return "[{}] ({}) {}".format(self.__class__.__name__,
+                                         self.id, str(self.__dict__))
 
     def save(self):
         """
@@ -47,7 +48,7 @@ class BaseModel():
            with the current_time
         """
         self.updated_at = datetime.now()
-        storage.save()
+        models.storage.save()
 
     def to_dict(self):
         """
@@ -56,9 +57,10 @@ class BaseModel():
         """
         d = {}
 
-        d = self.__dict__.copy()
-        d["__class__"] = self.__class__.__name__
-        d["created_at"] = d["created_at"].strftime("%Y-%m-%dT%H:%M:%S.%f")
-        d["updated_at"] = d["updated_at"].strftime("%Y-%m-%dT%H:%M:%S.%f")
-
+        for k, v in self.__dict__.items():
+            d["__class__"] = self.__class__.__name__
+            if k == "created_at" or k == "updated_at":
+                d[k] = v.isoformat()
+            else:
+                d[k] = v
         return d
